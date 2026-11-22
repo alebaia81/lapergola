@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import MainLayout from '../layouts/MainLayout.astro';
 import { siteConfig } from '../data/siteConfig';
+import { withBase } from '../utils/paths';
 
 import salaMattoniImg from '../assets/images/sala-mattoni-stufa.jpg';
 import verandaImg from '../assets/images/veranda-principale.jpg';
@@ -149,7 +150,7 @@ const waHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURICompo
             Prenota su WhatsApp
           </a>
           <a
-            href="/menu"
+            href={withBase('/menu')}
             class="inline-flex items-center justify-center rounded-full border border-terracotta px-6 py-3.5 text-sm font-semibold text-terracotta transition-colors hover:bg-terracotta hover:text-white"
           >
             Consulta il Menu Completo

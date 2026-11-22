@@ -3,7 +3,8 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.trattorialapergolaolza.it',
+  site: 'https://alebaia81.github.io',
+  base: '/lapergola',
   integrations: [tailwind()],
   image: {
     service: {

@@ -5,6 +5,7 @@ import ReviewsCarousel from '../components/ReviewsCarousel.astro';
 import MenuSection from '../components/MenuSection.astro';
 import WhatsAppBookingForm from '../components/WhatsAppBookingForm.astro';
 import { siteConfig } from '../data/siteConfig';
+import { withBase } from '../utils/paths';
 
 import verandaImg from '../assets/images/veranda-principale.jpg';
 import giardinoVerandaImg from '../assets/images/giardino-veranda.jpg';
@@ -134,7 +135,7 @@ const pillars = [
 
       <div class="mt-10 text-center">
         <a
-          href="/chi-siamo"
+          href={withBase('/chi-siamo')}
           class="inline-flex items-center gap-2 rounded-full border border-terracotta px-6 py-3 text-sm font-semibold text-terracotta transition-colors hover:bg-terracotta hover:text-white"
         >
           Scopri la nostra storia dal {siteConfig.foundedYear}
@@ -163,7 +164,7 @@ const pillars = [
           </h2>
         </div>
         <a
-          href="/gallery"
+          href={withBase('/gallery')}
           class="inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-terracotta-dark"
         >
           Guarda tutte le 15 foto

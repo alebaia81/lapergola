@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { menuCategories, menuItems } from '../data/menu';
 import { siteConfig } from '../data/siteConfig';
+import { withBase } from '../utils/paths';
 
 export interface Props {
   mode?: 'preview' | 'full';
@@ -242,7 +243,7 @@ const badgeFilters = [
           </p>
           <div class="mt-6">
             <a
-              href="/menu"
+              href={withBase('/menu')}
               class="inline-flex items-center gap-2.5 rounded-full bg-terracotta px-7 py-3.5 text-base font-bold text-white shadow-md transition-all hover:bg-terracotta-dark hover:shadow-lg"
             >
               Sfoglia il Menu Completo
