@@ -1,0 +1,167 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import GalleryGrid, { type GalleryPhoto } from '../components/GalleryGrid.astro';
+import { siteConfig } from '../data/siteConfig';
+
+import verandaImg from '../assets/images/veranda-principale.jpg';
+import giardinoVerandaImg from '../assets/images/giardino-veranda.jpg';
+import giardinoPergolaImg from '../assets/images/giardino-pergola.jpg';
+import salaMattoniImg from '../assets/images/sala-mattoni-stufa.jpg';
+import salaIntonacoImg from '../assets/images/sala-intonaco-caldo.jpg';
+import salumiImg from '../assets/images/piatti/salumi-gnocco.jpg';
+import pisareiImg from '../assets/images/piatti/pisarei-faso.jpg';
+import taglioliniNeriImg from '../assets/images/piatti/tagliolini-neri.jpg';
+import spaghettiScoglioImg from '../assets/images/piatti/spaghetti-scoglio.jpg';
+import pennetteCulatelloImg from '../assets/images/piatti/pennette-culatello.jpg';
+import frittoMistoImg from '../assets/images/piatti/fritto-misto.jpg';
+import grigliataMareImg from '../assets/images/piatti/grigliata-mare.jpg';
+import costataFerriImg from '../assets/images/piatti/costata-ferri.jpg';
+import cialdaFruttaImg from '../assets/images/piatti/cialda-frutta-gelato.jpg';
+import pannaCottaImg from '../assets/images/piatti/panna-cotta-frutti.jpg';
+
+const photos: GalleryPhoto[] = [
+  {
+    id: 'veranda-1',
+    src: verandaImg,
+    alt: 'La veranda luminosa di Trattoria La Pergola affacciata sul giardino verde',
+    caption: 'La Veranda sul Verde — Vetrate apribili in estate',
+    category: 'veranda',
+  },
+  {
+    id: 'veranda-2',
+    src: giardinoVerandaImg,
+    alt: 'Il giardino fiorito e il prato curato visto dalla veranda aperta di Trattoria La Pergola',
+    caption: 'Il Giardino Fiorito — Vista dalla veranda aperta',
+    category: 'veranda',
+  },
+  {
+    id: 'veranda-3',
+    src: giardinoPergolaImg,
+    alt: 'La pergola in legno illuminata di sera circondata dal verde e dalle aiuole fiorite',
+    caption: 'La Pergola di Sera — Atmosfera estiva nel verde',
+    category: 'veranda',
+  },
+  {
+    id: 'sala-1',
+    src: salaMattoniImg,
+    alt: 'Sala interna con mattoni antichi a vista e stufa in maiolica tradizionale',
+    caption: 'La Sala Interna con Stufa in Maiolica',
+    category: 'sala',
+  },
+  {
+    id: 'sala-2',
+    src: salaIntonacoImg,
+    alt: 'Sala accogliente con intonaco color terracotta, travi a vista e tovagliato verde salvia',
+    caption: 'Dettagli della Sala — Mattoni, legno e ospitalità',
+    category: 'sala',
+  },
+  {
+    id: 'piatti-1',
+    src: salumiImg,
+    alt: 'Tagliere di Salumi Piacentini DOP con torta fritta calda e calice di Gutturnio',
+    caption: 'Salumi Piacentini DOP e Torta Fritta',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-2',
+    src: pisareiImg,
+    alt: 'Ciotola rustica di Pisarei e fasö piacentini fatti a mano',
+    caption: 'Pisarei e Fasö della Tradizione',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-3',
+    src: taglioliniNeriImg,
+    alt: 'Tagliolini al nero di seppia con gamberi, pomodorini e basilico',
+    caption: 'Tagliolini Neri con Gamberi e Basilico',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-4',
+    src: spaghettiScoglioImg,
+    alt: 'Spaghetti allo scoglio con cozze, vongole e gamberi',
+    caption: 'Spaghetti allo Scoglio',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-5',
+    src: pennetteCulatelloImg,
+    alt: 'Pennette con culatello e crema al gorgonzola',
+    caption: 'Pennette Culatello e Gorgonzola',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-6',
+    src: frittoMistoImg,
+    alt: 'Fritto misto dorato di calamari e gamberi',
+    caption: 'Fritto Misto Calamari e Gamberi',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-7',
+    src: grigliataMareImg,
+    alt: 'Grigliata mista di mare alla piastra',
+    caption: 'Grigliata di Mare',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-8',
+    src: costataFerriImg,
+    alt: 'Costata di manzo ai ferri alle erbe',
+    caption: 'Costata di Manzo ai Ferri',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-9',
+    src: cialdaFruttaImg,
+    alt: 'Cialda croccante con frutta fresca, gelato alla crema e zabaione',
+    caption: 'Cialda con Frutta Fresca e Zabaione',
+    category: 'piatti',
+  },
+  {
+    id: 'piatti-10',
+    src: pannaCottaImg,
+    alt: 'Panna cotta artigianale con frutti di bosco',
+    caption: 'Panna Cotta ai Frutti di Bosco',
+    category: 'piatti',
+  },
+];
+
+const waHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.defaultWhatsAppMessage)}`;
+---
+
+<MainLayout
+  title={`Gallery — ${siteConfig.name}`}
+  description="Esplora gli ambienti e i piatti tipici di Trattoria La Pergola a Olza: la veranda sul verde, la sala in mattoni e le specialità piacentine."
+>
+  <section class="bg-sand py-14 sm:py-20">
+    <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+        Immagini dalla Trattoria
+      </p>
+      <h1 class="mt-2 font-serif text-4xl font-bold tracking-tight text-charcoal sm:text-5xl">
+        La Nostra Gallery
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-warmgray">
+        Clicca su qualsiasi fotografia per ingrandirla a schermo intero e scoprire i nostri spazi e i piatti della tradizione.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-cream py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <GalleryGrid photos={photos} showFilters={true} />
+
+      <div class="mt-14 text-center">
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2.5 rounded-full bg-whatsapp px-7 py-3.5 text-base font-bold text-whatsapp-ink shadow-md transition-colors hover:bg-[#1ebe5d]"
+        >
+          Prenota il tuo tavolo su WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

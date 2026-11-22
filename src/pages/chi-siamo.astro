@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import MainLayout from '../layouts/MainLayout.astro';
+import { siteConfig } from '../data/siteConfig';
+
+import salaMattoniImg from '../assets/images/sala-mattoni-stufa.jpg';
+import verandaImg from '../assets/images/veranda-principale.jpg';
+import giardinoVerandaImg from '../assets/images/giardino-veranda.jpg';
+
+const waHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.defaultWhatsAppMessage)}`;
+---
+
+<MainLayout
+  title={`Chi Siamo — ${siteConfig.name}`}
+  description="La storia di Trattoria La Pergola a Olza: dal 1978 cucina piacentina e specialità di pesce, tra la veranda estiva aperta sul giardino e la sala con stufa in maiolica."
+>
+  <!-- Hero Interna -->
+  <section class="relative flex min-h-[48vh] items-center overflow-hidden bg-charcoal">
+    <Image
+      src={salaMattoniImg}
+      alt="Dettaglio della sala interna con mattoni antichi e stufa in maiolica di Trattoria La Pergola"
+      widths={[640, 1280]}
+      sizes="100vw"
+      loading="eager"
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+    <div aria-hidden="true" class="absolute inset-0 bg-charcoal/70"></div>
+    <div class="relative z-10 mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sand/90">
+        La Nostra Storia • Dal {siteConfig.foundedYear}
+      </p>
+      <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight text-cream sm:text-5xl lg:text-6xl">
+        Una trattoria vera, dove sentirsi a casa dal 1978
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-sand/90 sm:text-lg">
+        A Olza di Monticelli d'Ongina portiamo in tavola i grandi piatti della Bassa Piacentina e una cucina di mare generosa, preparata con cura ogni giorno.
+      </p>
+    </div>
+  </section>
+
+  <!-- Racconto Editoriale -->
+  <section class="bg-cream py-16 sm:py-24">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div class="space-y-5">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+            La Nostra Cucina
+          </p>
+          <h2 class="font-serif text-3xl font-bold text-charcoal sm:text-4xl">
+            I sapori di Piacenza e il piacere del pesce, allo stesso tavolo
+          </h2>
+          <p class="text-base leading-relaxed text-warmgray">
+            Chi entra alla Trattoria La Pergola sa di trovare una cucina concreta, senza formalismi inutili ma attenta a ciò che conta nel piatto. Da un lato custodiamo i capisaldi del nostro territorio: i salumi piacentini, i pisarei e fasoi tirati a mano, il culatello, la spalla cotta di San Secondo e le carni alla griglia.
+          </p>
+          <p class="text-base leading-relaxed text-warmgray">
+            Dall'altro lato, negli anni siamo diventati un punto di riferimento nella zona anche per chi ama il <strong>pesce</strong>: dai tagliolini al nero di seppia con gamberi agli spaghetti allo scoglio, dai pisarei con polpa d'astice fino alle grigliate e al fritto misto asciutto e dorato.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-charcoal/10 shadow-sm">
+          <Image
+            src={verandaImg}
+            alt="La veranda luminosa di Trattoria La Pergola con vetrate in legno sul giardino"
+            widths={[500, 900]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+
+      <!-- I Due Ambienti -->
+      <div class="mt-16 grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div class="order-2 overflow-hidden rounded-3xl border border-charcoal/10 shadow-sm lg:order-1">
+          <Image
+            src={giardinoVerandaImg}
+            alt="Il giardino curato con prato verde e aiuole fiorite visto dalla veranda aperta"
+            widths={[500, 900]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            class="h-full w-full object-cover"
+          />
+        </div>
+
+        <div class="order-1 space-y-5 lg:order-2">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-sage">
+            I Nostri Ambienti
+          </p>
+          <h2 class="font-serif text-3xl font-bold text-charcoal sm:text-4xl">
+            La veranda che d'estate si apre sul verde e la sala con stufa in maiolica
+          </h2>
+          <p class="text-base leading-relaxed text-warmgray">
+            La nostra <strong>veranda in legno</strong> è il cuore luminoso del locale: nella bella stagione le grandi vetrate si aprono direttamente sul prato inglese e sulle aiuole fiorite del giardino, regalando il piacere di pranzare e cenare all'aria aperta ma sempre al riparo della pergola.
+          </p>
+          <p class="text-base leading-relaxed text-warmgray">
+            Nei mesi più freddi, la <strong>sala interna</strong> accoglie gli ospiti tra travi in legno, muri in mattoni pieni a vista e il tepore della tradizionale stufa in maiolica.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- I Tre Punti Fermi -->
+  <section class="bg-sand py-16 sm:py-24">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+          La Nostra Promessa
+        </p>
+        <h2 class="mt-2 font-serif text-3xl font-bold text-charcoal sm:text-4xl">
+          Cosa trovi ogni volta che vieni a trovarci
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <div class="rounded-2xl border border-charcoal/10 bg-cream p-6">
+          <h3 class="font-serif text-2xl font-bold text-charcoal">Tradizione della Bassa</h3>
+          <p class="mt-2 text-sm leading-relaxed text-warmgray sm:text-base">
+            Salumi piacentini affettati al momento, pisarei fatti in casa, culatello e spalla cotta di San Secondo per chi cerca i sapori autentici delle nostre terre.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-charcoal/10 bg-cream p-6">
+          <h3 class="font-serif text-2xl font-bold text-charcoal">Specialità di Mare</h3>
+          <p class="mt-2 text-sm leading-relaxed text-warmgray sm:text-base">
+            Un menu di pesce completo dall'antipasto ai secondi: primi ricchi di sugo, filetti di branzino, gamberoni alla griglia e fritti croccanti.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-charcoal/10 bg-cream p-6">
+          <h3 class="font-serif text-2xl font-bold text-charcoal">Dolci della Casa &amp; Conto Onesto</h3>
+          <p class="mt-2 text-sm leading-relaxed text-warmgray sm:text-base">
+            Semifreddi al torroncino e all'amaretto, cialde croccanti con frutta e zabaione, tiramisù e panna cotta preparati da noi, con un rapporto qualità-prezzo trasparente.
+          </p>
+        </div>
+      </div>
+
+      <!-- CTA Finale -->
+      <div class="mt-14 rounded-3xl border border-terracotta/20 bg-cream p-8 text-center shadow-sm sm:p-10">
+        <h2 class="font-serif text-3xl font-bold text-charcoal sm:text-4xl">
+          Ti aspettiamo a Olza
+        </h2>
+        <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-warmgray sm:text-base">
+          Scrivici su WhatsApp per riservare il tuo tavolo in veranda o nella sala interna, oppure guarda subito tutti i piatti del menu.
+        </p>
+        <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-whatsapp px-6 py-3.5 text-sm font-bold text-whatsapp-ink shadow-sm transition-colors hover:bg-[#1ebe5d]"
+          >
+            Prenota su WhatsApp
+          </a>
+          <a
+            href="/menu"
+            class="inline-flex items-center justify-center rounded-full border border-terracotta px-6 py-3.5 text-sm font-semibold text-terracotta transition-colors hover:bg-terracotta hover:text-white"
+          >
+            Consulta il Menu Completo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

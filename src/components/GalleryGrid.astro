@@ -1,0 +1,252 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface GalleryPhoto {
+  id: string;
+  src: ImageMetadata;
+  alt: string;
+  caption: string;
+  category: 'veranda' | 'sala' | 'piatti';
+}
+
+interface Props {
+  photos: GalleryPhoto[];
+  showFilters?: boolean;
+}
+
+const { photos, showFilters = true } = Astro.props;
+
+const filterCategories = [
+  { id: 'all', label: 'Tutte le foto' },
+  { id: 'veranda', label: 'La Veranda' },
+  { id: 'sala', label: 'La Sala Interna' },
+  { id: 'piatti', label: 'I Nostri Piatti' },
+];
+---
+
+<div>
+  {
+    showFilters && (
+      <div
+        role="tablist"
+        aria-label="Filtra la galleria fotografica"
+        class="mb-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+      >
+        {filterCategories.map((cat, index) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            data-gallery-filter={cat.id}
+            class:list={[
+              'gallery-filter-btn rounded-full border px-4 py-2 text-sm font-semibold transition-all',
+              index === 0
+                ? 'border-terracotta bg-terracotta text-white shadow-sm'
+                : 'border-charcoal/15 bg-sand text-charcoal hover:border-terracotta hover:text-terracotta',
+            ]}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      photos.map((photo, idx) => (
+        <figure
+          data-photo-category={photo.category}
+          class="gallery-card group relative overflow-hidden rounded-2xl border border-charcoal/10 bg-sand shadow-sm"
+        >
+          <button
+            type="button"
+            data-lightbox-index={idx}
+            data-lightbox-src={photo.src.src}
+            data-lightbox-alt={photo.alt}
+            data-lightbox-caption={photo.caption}
+            aria-label={`Ingrandisci foto: ${photo.caption}`}
+            class="block w-full text-left focus-visible:outline-none"
+          >
+            <div class="aspect-[4/3] overflow-hidden">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                widths={[400, 800]}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <figcaption class="p-4">
+              <p class="font-serif text-lg font-bold text-charcoal">{photo.caption}</p>
+            </figcaption>
+          </button>
+        </figure>
+      ))
+    }
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div
+  id="gallery-lightbox"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Visualizzatore immagine a schermo intero"
+  class="fixed inset-0 z-[60] hidden items-center justify-center bg-charcoal/95 p-4 backdrop-blur-sm"
+>
+  <button
+    type="button"
+    id="lightbox-close"
+    aria-label="Chiudi visualizzatore"
+    class="absolute right-4 top-4 rounded-full bg-cream/15 p-2.5 text-cream transition-colors hover:bg-terracotta"
+  >
+    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    id="lightbox-prev"
+    aria-label="Foto precedente"
+    class="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream/15 p-3 text-cream transition-colors hover:bg-terracotta sm:left-6"
+  >
+    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+
+  <div class="flex max-h-[88vh] max-w-4xl flex-col items-center">
+    <img
+      id="lightbox-img"
+      src=""
+      alt=""
+      class="max-h-[75vh] w-auto rounded-xl object-contain shadow-2xl"
+    />
+    <p id="lightbox-caption" class="mt-4 text-center font-serif text-xl font-semibold text-cream"></p>
+  </div>
+
+  <button
+    type="button"
+    id="lightbox-next"
+    aria-label="Foto successiva"
+    class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream/15 p-3 text-cream transition-colors hover:bg-terracotta sm:right-6"
+  >
+    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+</div>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.gallery-filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.gallery-card');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.galleryFilter;
+      filterBtns.forEach((b) => {
+        const active = b === btn;
+        b.setAttribute('aria-selected', String(active));
+        if (active) {
+          b.classList.remove('border-charcoal/15', 'bg-sand', 'text-charcoal');
+          b.classList.add('border-terracotta', 'bg-terracotta', 'text-white', 'shadow-sm');
+        } else {
+          b.classList.remove('border-terracotta', 'bg-terracotta', 'text-white', 'shadow-sm');
+          b.classList.add('border-charcoal/15', 'bg-sand', 'text-charcoal');
+        }
+      });
+
+      cards.forEach((card) => {
+        if (cat === 'all' || card.dataset.photoCategory === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // Lightbox logic
+  const lightbox = document.getElementById('gallery-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-lightbox-index]'));
+
+  let currentIdx = 0;
+
+  function visibleTriggers() {
+    return triggers.filter((t) => !t.closest('.gallery-card')?.classList.contains('hidden'));
+  }
+
+  function showSlide(index: number) {
+    const visible = visibleTriggers();
+    if (visible.length === 0 || !lightboxImg || !lightboxCaption) return;
+    currentIdx = (index + visible.length) % visible.length;
+    const item = visible[currentIdx];
+    lightboxImg.src = item.dataset.lightboxSrc || '';
+    lightboxImg.alt = item.dataset.lightboxAlt || '';
+    lightboxCaption.textContent = item.dataset.lightboxCaption || '';
+  }
+
+  function openLightbox(triggerBtn: HTMLButtonElement) {
+    const visible = visibleTriggers();
+    const idx = visible.indexOf(triggerBtn);
+    showSlide(idx >= 0 ? idx : 0);
+    lightbox?.classList.remove('hidden');
+    lightbox?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.add('hidden');
+    lightbox?.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  triggers.forEach((btn) => {
+    btn.addEventListener('click', () => openLightbox(btn));
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  prevBtn?.addEventListener('click', () => showSlide(currentIdx - 1));
+  nextBtn?.addEventListener('click', () => showSlide(currentIdx + 1));
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox?.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showSlide(currentIdx - 1);
+    if (e.key === 'ArrowRight') showSlide(currentIdx + 1);
+  });
+
+  // Basic touch swipe for mobile
+  let touchStartX = 0;
+  lightbox?.addEventListener(
+    'touchstart',
+    (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+  lightbox?.addEventListener(
+    'touchend',
+    (e) => {
+      const diff = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) showSlide(currentIdx - 1);
+        else showSlide(currentIdx + 1);
+      }
+    },
+    { passive: true }
+  );
+</script>

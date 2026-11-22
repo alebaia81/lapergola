@@ -1,0 +1,452 @@
+---
+import { Image } from 'astro:assets';
+import { menuCategories, menuItems } from '../data/menu';
+import { siteConfig } from '../data/siteConfig';
+
+export interface Props {
+  mode?: 'preview' | 'full';
+}
+
+const { mode = 'preview' } = Astro.props;
+const isPreview = mode === 'preview';
+
+const displayedItems = isPreview
+  ? menuItems.filter((item) => item.featuredOnHome)
+  : menuItems;
+
+const displayedCategories = menuCategories.filter((cat) =>
+  displayedItems.some((item) => item.category === cat.id)
+);
+
+const badgeFilters = [
+  { id: 'all', label: 'Tutti i gusti' },
+  { id: 'Tradizione', label: 'Tradizione Piacentina' },
+  { id: 'Mare', label: 'Specialità di Mare' },
+  { id: 'Vegetariano', label: 'Vegetariano' },
+  { id: 'Fatto in casa', label: 'Fatto in casa' },
+];
+---
+
+<section id="menu" aria-labelledby="menu-heading" class="scroll-mt-20 bg-cream py-16 sm:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+        {isPreview ? 'I Piatti Più Amati (Con Foto)' : 'La Carta Completa della Pergola'}
+      </p>
+      <h2 id="menu-heading" class="mt-2 font-serif text-4xl font-bold tracking-tight text-charcoal sm:text-5xl">
+        {isPreview ? 'Assaggio del Nostro Menu' : 'Tutti i Piatti e i Prezzi'}
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-warmgray sm:text-lg">
+        {
+          isPreview
+            ? 'Una selezione delle nostre specialità fotografate tra cucina piacentina e piatti di mare. Tocca qualsiasi miniatura per ingrandire la foto oppure apri la carta completa.'
+            : 'Dalla tradizione piacentina ai grandi piatti di pesce: ricette curate, porzioni generose e prezzi chiari. Tocca le miniature per ingrandire le foto dei piatti.'
+        }
+      </p>
+    </div>
+
+    <!-- Primary Filter: Category Tabs -->
+    <div
+      role="tablist"
+      aria-label="Filtra il menu per portata"
+      class="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5"
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected="true"
+        data-category="all"
+        class="menu-tab rounded-full border border-terracotta bg-terracotta px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-terracotta-dark"
+      >
+        Tutte le portate
+      </button>
+      {
+        displayedCategories.map((cat) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-category={cat.id}
+            class="menu-tab rounded-full border border-charcoal/15 bg-sand px-4 py-2 text-sm font-semibold text-charcoal transition-all hover:border-terracotta hover:text-terracotta"
+          >
+            {cat.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Secondary Filter: Terra / Mare / Vegetariano -->
+    <div
+      aria-label="Filtra per specialità"
+      class="mt-4 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+    >
+      <span class="mr-1 text-xs font-semibold uppercase tracking-wider text-warmgray">
+        Percorso:
+      </span>
+      {
+        badgeFilters.map((bf, idx) => (
+          <button
+            type="button"
+            data-badge-filter={bf.id}
+            aria-pressed={idx === 0 ? 'true' : 'false'}
+            class:list={[
+              'badge-filter-btn rounded-full px-3 py-1 text-xs font-semibold transition-all',
+              idx === 0
+                ? 'bg-charcoal text-cream shadow-sm'
+                : 'border border-charcoal/15 bg-cream text-warmgray hover:border-charcoal/40 hover:text-charcoal',
+            ]}
+          >
+            {bf.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Grouped Menu Sections -->
+    <div id="menu-sections-wrapper" class="mt-12 space-y-12">
+      {
+        displayedCategories.map((cat) => {
+          const catItems = displayedItems.filter((item) => item.category === cat.id);
+          return (
+            <div data-category-group={cat.id} class="menu-category-group">
+              <div class="mb-5 border-b border-charcoal/15 pb-3">
+                <h3 class="font-serif text-2xl font-bold text-charcoal sm:text-3xl">
+                  {cat.label}
+                </h3>
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-2 lg:gap-5">
+                {catItems.map((item) => (
+                  <article
+                    data-item-category={item.category}
+                    data-item-badges={(item.badges || []).join(',')}
+                    class="menu-item-card flex items-start gap-4 rounded-2xl border border-charcoal/10 bg-sand/70 p-4 transition-shadow hover:shadow-md sm:gap-5 sm:p-5"
+                  >
+                    {item.image && (
+                      <button
+                        type="button"
+                        data-dish-trigger
+                        data-dish-name={item.name}
+                        data-dish-price={item.price}
+                        data-dish-desc={item.description || ''}
+                        data-dish-category={cat.label}
+                        data-dish-alt={item.imageAlt || item.name}
+                        aria-label={`Ingrandisci foto di ${item.name}`}
+                        class="group relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-charcoal/15 bg-cream shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta sm:h-24 sm:w-24"
+                      >
+                        <Image
+                          src={item.image}
+                          alt={item.imageAlt || item.name}
+                          widths={[160, 240]}
+                          sizes="96px"
+                          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                        <!-- Hidden larger image source for lightbox -->
+                        <Image
+                          src={item.image}
+                          alt={item.imageAlt || item.name}
+                          widths={[900]}
+                          sizes="90vw"
+                          class="dish-full-img hidden"
+                        />
+                        <span
+                          aria-hidden="true"
+                          class="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-charcoal/75 text-cream opacity-85 transition-opacity group-hover:opacity-100"
+                        >
+                          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15zM10.5 7.5v6m3-3h-6" />
+                          </svg>
+                        </span>
+                      </button>
+                    )}
+
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-serif text-xl font-bold leading-snug text-charcoal sm:text-2xl">
+                          {item.name}
+                        </h4>
+                        <span class="shrink-0 font-sans text-base font-bold text-terracotta sm:text-lg">
+                          {item.price}
+                        </span>
+                      </div>
+
+                      {item.badges && item.badges.length > 0 && (
+                        <div class="mt-1.5 flex flex-wrap gap-1.5">
+                          {item.badges.map((badge) => (
+                            <span
+                              class:list={[
+                                'inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide',
+                                badge === 'Vegetariano'
+                                  ? 'bg-sage text-white'
+                                  : badge === 'Tradizione'
+                                    ? 'bg-terracotta/15 text-terracotta-dark'
+                                    : badge === 'Mare'
+                                      ? 'bg-sage/15 text-sage-dark'
+                                      : 'bg-charcoal/10 text-charcoal',
+                              ]}
+                            >
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {item.description && (
+                        <p class="mt-2 text-sm leading-relaxed text-warmgray">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <!-- Empty Filter State -->
+    <div
+      id="menu-empty-state"
+      class="mt-10 hidden rounded-2xl border border-charcoal/10 bg-sand p-8 text-center"
+    >
+      <p class="font-serif text-2xl font-bold text-charcoal">
+        Nessun piatto trovato per questa combinazione di filtri
+      </p>
+      <p class="mt-2 text-sm text-warmgray">
+        Prova a selezionare "Tutte le portate" oppure "Tutti i gusti".
+      </p>
+      <button
+        type="button"
+        id="menu-reset-filters"
+        class="mt-4 inline-flex items-center rounded-full bg-terracotta px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-terracotta-dark"
+      >
+        Mostra tutti i piatti
+      </button>
+    </div>
+
+    <!-- CTA to Full Menu Page (shown only in preview mode on Homepage) -->
+    {
+      isPreview && (
+        <div class="mt-12 rounded-3xl border border-terracotta/25 bg-sand p-6 text-center shadow-sm sm:p-10">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+            La Carta Completa
+          </p>
+          <h3 class="mt-2 font-serif text-2xl font-bold text-charcoal sm:text-3xl">
+            Vuoi scoprire tutti gli antipasti, i primi, i secondi, i contorni e i dolci?
+          </h3>
+          <p class="mx-auto mt-2.5 max-w-2xl text-sm leading-relaxed text-warmgray sm:text-base">
+            Nella pagina dedicata trovi l'intero menu della Trattoria con tutte le proposte di terra e di mare e i relativi prezzi.
+          </p>
+          <div class="mt-6">
+            <a
+              href="/menu"
+              class="inline-flex items-center gap-2.5 rounded-full bg-terracotta px-7 py-3.5 text-base font-bold text-white shadow-md transition-all hover:bg-terracotta-dark hover:shadow-lg"
+            >
+              Sfoglia il Menu Completo
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Info Box -->
+    <div class="mt-10 rounded-2xl border border-sage/30 bg-sage/10 p-6 sm:p-8">
+      <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div class="space-y-1.5">
+          <p class="font-serif text-2xl font-bold text-charcoal">
+            Pranzo di Lavoro • Martedì – Venerdì
+          </p>
+          <p class="text-sm leading-relaxed text-warmgray sm:text-base">
+            {siteConfig.lunchMenuNote}
+          </p>
+        </div>
+        <div class="shrink-0 border-t border-sage/20 pt-3 text-xs font-medium text-charcoal md:border-l md:border-t-0 md:pl-6 md:pt-0">
+          <p class="text-warmgray">
+            Alcuni prodotti della pesca (gamberi, seppie, piovra e calamari) possono essere congelati all'origine. Chiedi al personale per informazioni sugli allergeni.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal for Dish Thumbnails -->
+  <dialog
+    id="menu-dish-lightbox"
+    aria-label="Dettaglio piatto e fotografia ingrandita"
+    class="m-auto max-h-[92vh] w-[92vw] max-w-2xl overflow-hidden rounded-3xl border border-charcoal/15 bg-cream p-0 text-charcoal shadow-2xl backdrop:bg-charcoal/85 backdrop:backdrop-blur-sm"
+  >
+    <div class="relative flex flex-col">
+      <button
+        type="button"
+        id="dish-lightbox-close"
+        aria-label="Chiudi anteprima piatto"
+        class="absolute right-3.5 top-3.5 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-charcoal/75 text-cream transition-colors hover:bg-terracotta"
+      >
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="aspect-[4/3] w-full overflow-hidden bg-charcoal">
+        <img
+          id="dish-lightbox-img"
+          src=""
+          alt=""
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <div class="p-6 sm:p-7">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p id="dish-lightbox-cat" class="text-xs font-bold uppercase tracking-[0.18em] text-sage"></p>
+            <h3 id="dish-lightbox-title" class="mt-1 font-serif text-2xl font-bold text-charcoal sm:text-3xl"></h3>
+          </div>
+          <span
+            id="dish-lightbox-price"
+            class="shrink-0 rounded-full bg-terracotta/15 px-3.5 py-1 font-sans text-lg font-bold text-terracotta-dark"
+          ></span>
+        </div>
+        <p id="dish-lightbox-desc" class="mt-3 text-sm leading-relaxed text-warmgray sm:text-base"></p>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.menu-tab');
+  const badgeBtns = document.querySelectorAll<HTMLButtonElement>('.badge-filter-btn');
+  const categoryGroups = document.querySelectorAll<HTMLElement>('.menu-category-group');
+  const emptyState = document.getElementById('menu-empty-state');
+  const resetBtn = document.getElementById('menu-reset-filters');
+
+  let activeCategory = 'all';
+  let activeBadge = 'all';
+
+  function applyFilters() {
+    let totalVisible = 0;
+
+    categoryGroups.forEach((group) => {
+      const groupCat = group.dataset.categoryGroup || '';
+      const categoryMatches = activeCategory === 'all' || activeCategory === groupCat;
+
+      if (!categoryMatches) {
+        group.classList.add('hidden');
+        return;
+      }
+
+      const cards = group.querySelectorAll<HTMLElement>('.menu-item-card');
+      let visibleInGroup = 0;
+
+      cards.forEach((card) => {
+        const badges = (card.dataset.itemBadges || '').split(',').filter(Boolean);
+        const badgeMatches = activeBadge === 'all' || badges.includes(activeBadge);
+
+        if (badgeMatches) {
+          card.classList.remove('hidden');
+          visibleInGroup++;
+          totalVisible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleInGroup > 0) {
+        group.classList.remove('hidden');
+      } else {
+        group.classList.add('hidden');
+      }
+    });
+
+    if (emptyState) {
+      emptyState.classList.toggle('hidden', totalVisible > 0);
+    }
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activeCategory = tab.dataset.category || 'all';
+
+      tabs.forEach((t) => {
+        const isCurrent = t === tab;
+        t.setAttribute('aria-selected', String(isCurrent));
+        if (isCurrent) {
+          t.classList.remove('border-charcoal/15', 'bg-sand', 'text-charcoal');
+          t.classList.add('border-terracotta', 'bg-terracotta', 'text-white', 'shadow-sm');
+        } else {
+          t.classList.remove('border-terracotta', 'bg-terracotta', 'text-white', 'shadow-sm');
+          t.classList.add('border-charcoal/15', 'bg-sand', 'text-charcoal');
+        }
+      });
+
+      applyFilters();
+    });
+  });
+
+  badgeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeBadge = btn.dataset.badgeFilter || 'all';
+
+      badgeBtns.forEach((b) => {
+        const isCurrent = b === btn;
+        b.setAttribute('aria-pressed', String(isCurrent));
+        if (isCurrent) {
+          b.classList.remove('border', 'border-charcoal/15', 'bg-cream', 'text-warmgray');
+          b.classList.add('bg-charcoal', 'text-cream', 'shadow-sm');
+        } else {
+          b.classList.remove('bg-charcoal', 'text-cream', 'shadow-sm');
+          b.classList.add('border', 'border-charcoal/15', 'bg-cream', 'text-warmgray');
+        }
+      });
+
+      applyFilters();
+    });
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    const firstTab = tabs[0];
+    const firstBadge = badgeBtns[0];
+    firstTab?.click();
+    firstBadge?.click();
+  });
+
+  // Lightbox logic for dish thumbnails
+  const dialog = document.getElementById('menu-dish-lightbox') as HTMLDialogElement | null;
+  const lbImg = document.getElementById('dish-lightbox-img') as HTMLImageElement | null;
+  const lbTitle = document.getElementById('dish-lightbox-title');
+  const lbPrice = document.getElementById('dish-lightbox-price');
+  const lbDesc = document.getElementById('dish-lightbox-desc');
+  const lbCat = document.getElementById('dish-lightbox-cat');
+  const lbClose = document.getElementById('dish-lightbox-close');
+  const triggers = document.querySelectorAll<HTMLButtonElement>('[data-dish-trigger]');
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const fullImg = trigger.querySelector<HTMLImageElement>('.dish-full-img');
+      if (!dialog || !lbImg || !fullImg) return;
+
+      lbImg.src = fullImg.currentSrc || fullImg.src;
+      lbImg.alt = trigger.dataset.dishAlt || '';
+      if (lbTitle) lbTitle.textContent = trigger.dataset.dishName || '';
+      if (lbPrice) lbPrice.textContent = trigger.dataset.dishPrice || '';
+      if (lbDesc) lbDesc.textContent = trigger.dataset.dishDesc || '';
+      if (lbCat) lbCat.textContent = trigger.dataset.dishCategory || '';
+
+      dialog.showModal();
+    });
+  });
+
+  lbClose?.addEventListener('click', () => {
+    dialog?.close();
+  });
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) {
+      dialog.close();
+    }
+  });
+</script>

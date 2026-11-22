@@ -1,0 +1,56 @@
+---
+import { siteConfig } from '../data/siteConfig';
+
+const schemaData = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  servesCuisine: ['Cucina Piacentina', 'Specialità di Pesce', 'Cucina Emiliana', 'Cucina Italiana Tradizionale'],
+  priceRange: '€€',
+  telephone: siteConfig.phoneRaw,
+  email: siteConfig.email,
+  url: 'https://www.trattorialapergolaolza.it',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Località Olza 6 (Via Olza Fogarole Cristo)',
+    addressLocality: "Monticelli d'Ongina",
+    addressRegion: 'PC',
+    postalCode: '29010',
+    addressCountry: 'IT',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 45.0647,
+    longitude: 9.9042,
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.3',
+    reviewCount: '850',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '12:00',
+      closes: '14:30',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '19:30',
+      closes: '22:30',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Sunday'],
+      opens: '12:00',
+      closes: '15:00',
+    },
+  ],
+  hasMenu: 'https://www.trattorialapergolaolza.it/menu',
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />

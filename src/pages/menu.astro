@@ -1,0 +1,37 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import MenuSection from '../components/MenuSection.astro';
+import WhatsAppBookingForm from '../components/WhatsAppBookingForm.astro';
+import { siteConfig } from '../data/siteConfig';
+---
+
+<MainLayout
+  title={`Il Menu Completo e Prezzi — ${siteConfig.name}`}
+  description={`Scopri tutti i piatti e i prezzi di Trattoria La Pergola a Olza: salumi piacentini, pisarei e fasoi, tagliolini neri ai gamberi, fritto misto, grigliate e dolci della casa.`}
+>
+  <!-- Page Header -->
+  <section class="border-b border-charcoal/10 bg-sand py-14 sm:py-20">
+    <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+        Tradizione Piacentina &amp; Cucina di Mare
+      </p>
+      <h1 class="mt-2 font-serif text-4xl font-bold tracking-tight text-charcoal sm:text-5xl md:text-6xl">
+        La Carta Completa della Pergola
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-warmgray sm:text-lg">
+        Tutti i piatti preparati nella nostra cucina: dagli antipasti ai dolci fatti in casa, con prezzi chiari e trasparenti.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-charcoal">
+        <span class="rounded-full border border-sage/30 bg-sage/15 px-3.5 py-1.5 text-sage-dark">
+          Menu di Lavoro: Martedì – Venerdì a pranzo
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full Menu Component -->
+  <MenuSection mode="full" />
+
+  <!-- Direct Booking Form on Menu Page -->
+  <WhatsAppBookingForm />
+</MainLayout>

@@ -1,0 +1,297 @@
+---
+import { siteConfig } from '../data/siteConfig';
+
+const now = new Date();
+const todayIso = now.toISOString().split('T')[0];
+
+// Se oggi è lunedì (1), proponiamo di default martedì come data precompilata
+const defaultDateObj = new Date(now);
+if (defaultDateObj.getDay() === 1) {
+  defaultDateObj.setDate(defaultDateObj.getDate() + 1);
+}
+const defaultDateIso = defaultDateObj.toISOString().split('T')[0];
+---
+
+<section id="prenota" aria-labelledby="prenota-heading" class="scroll-mt-20 bg-sand py-16 sm:py-24">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="rounded-3xl border border-charcoal/10 bg-cream p-6 shadow-sm sm:p-10 lg:p-12">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sage">
+          Prenotazione Rapida
+        </p>
+        <h2 id="prenota-heading" class="mt-2 font-serif text-3xl font-bold tracking-tight text-charcoal sm:text-4xl lg:text-5xl">
+          Riservare un tavolo è semplice
+        </h2>
+        <p class="mt-3 text-sm leading-relaxed text-warmgray sm:text-base">
+          Scegli giorno, turno, numero di ospiti e la sala che preferisci: il messaggio si compila da solo su WhatsApp.
+        </p>
+      </div>
+
+      <form
+        id="whatsapp-booking-form"
+        data-wa-number={siteConfig.whatsappNumber}
+        novalidate
+        class="mt-8 space-y-6"
+      >
+        <div class="grid gap-5 sm:grid-cols-2">
+          <!-- Nome -->
+          <div>
+            <label for="booking-name" class="block text-sm font-semibold text-charcoal">
+              Nome e Cognome <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="booking-name"
+              name="name"
+              required
+              autocomplete="name"
+              placeholder="Es. Marco Rossi"
+              class="mt-1.5 block w-full rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm text-charcoal placeholder:text-warmgray/60 focus:border-terracotta focus:outline-none focus:ring-2 focus:ring-terracotta/30"
+            />
+            <p id="error-name" class="mt-1 hidden text-xs font-medium text-terracotta-dark" role="alert">
+              Inserisci il tuo nome per la prenotazione.
+            </p>
+          </div>
+
+          <!-- Numero di persone -->
+          <div>
+            <label for="booking-guests" class="block text-sm font-semibold text-charcoal">
+              Numero di Persone <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <select
+              id="booking-guests"
+              name="guests"
+              required
+              class="mt-1.5 block w-full rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm text-charcoal focus:border-terracotta focus:outline-none focus:ring-2 focus:ring-terracotta/30"
+            >
+              <option value="2">2 persone</option>
+              <option value="3">3 persone</option>
+              <option value="4" selected>4 persone</option>
+              <option value="5">5 persone</option>
+              <option value="6">6 persone</option>
+              <option value="7">7 persone</option>
+              <option value="8+">8 o più persone (Tavolata / Evento)</option>
+            </select>
+          </div>
+
+          <!-- Data -->
+          <div>
+            <label for="booking-date" class="block text-sm font-semibold text-charcoal">
+              Data <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="date"
+              id="booking-date"
+              name="date"
+              required
+              min={todayIso}
+              value={defaultDateIso}
+              class="mt-1.5 block w-full rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm text-charcoal focus:border-terracotta focus:outline-none focus:ring-2 focus:ring-terracotta/30"
+            />
+            <p id="error-date" class="mt-1.5 hidden rounded-lg bg-terracotta/10 px-3 py-2 text-xs font-medium text-terracotta-dark" role="alert">
+              Seleziona una data valida (il lunedì siamo chiusi).
+            </p>
+          </div>
+
+          <!-- Turno -->
+          <div>
+            <span class="block text-sm font-semibold text-charcoal">
+              Turno <span class="text-terracotta" aria-hidden="true">*</span>
+            </span>
+            <div class="mt-1.5 grid grid-cols-2 gap-3" role="radiogroup" aria-label="Seleziona turno">
+              <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm font-medium text-charcoal transition-colors has-[:checked]:border-terracotta has-[:checked]:bg-terracotta/10 has-[:checked]:font-semibold has-[:checked]:text-terracotta-dark">
+                <input type="radio" name="shift" value="Pranzo" checked class="accent-terracotta" />
+                <span>Pranzo</span>
+              </label>
+              <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm font-medium text-charcoal transition-colors has-[:checked]:border-terracotta has-[:checked]:bg-terracotta/10 has-[:checked]:font-semibold has-[:checked]:text-terracotta-dark">
+                <input type="radio" name="shift" value="Cena" class="accent-terracotta" />
+                <span>Cena</span>
+              </label>
+            </div>
+            <p id="sunday-dinner-warning" class="mt-1.5 hidden rounded-lg bg-sage/15 px-3 py-1.5 text-xs font-medium text-sage-dark">
+              Nota: la domenica siamo aperti a pranzo (12:00 – 15:00). Per aperture serali riservate a gruppi, indicacelo nelle note.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scelta Sala Preferita -->
+        <div>
+          <span class="block text-sm font-semibold text-charcoal">
+            Preferenza Sala
+          </span>
+          <div class="mt-1.5 grid grid-cols-1 gap-2.5 sm:grid-cols-3" role="radiogroup" aria-label="Preferenza sala">
+            <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-charcoal/20 bg-cream px-3.5 py-2.5 text-xs font-medium text-charcoal transition-colors has-[:checked]:border-terracotta has-[:checked]:bg-terracotta/10 has-[:checked]:font-semibold has-[:checked]:text-terracotta-dark sm:text-sm">
+              <input type="radio" name="room" value="Indifferente" checked class="accent-terracotta" />
+              <span>Indifferente</span>
+            </label>
+            <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-charcoal/20 bg-cream px-3.5 py-2.5 text-xs font-medium text-charcoal transition-colors has-[:checked]:border-terracotta has-[:checked]:bg-terracotta/10 has-[:checked]:font-semibold has-[:checked]:text-terracotta-dark sm:text-sm">
+              <input type="radio" name="room" value="Veranda sul giardino" class="accent-terracotta" />
+              <span>Veranda sul giardino</span>
+            </label>
+            <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-charcoal/20 bg-cream px-3.5 py-2.5 text-xs font-medium text-charcoal transition-colors has-[:checked]:border-terracotta has-[:checked]:bg-terracotta/10 has-[:checked]:font-semibold has-[:checked]:text-terracotta-dark sm:text-sm">
+              <input type="radio" name="room" value="Sala storica in mattoni" class="accent-terracotta" />
+              <span>Sala interna in mattoni</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Note -->
+        <div>
+          <label for="booking-notes" class="block text-sm font-semibold text-charcoal">
+            Note o Richieste Particolari <span class="font-normal text-warmgray">(opzionale)</span>
+          </label>
+          <textarea
+            id="booking-notes"
+            name="notes"
+            rows="3"
+            placeholder="Es. Seggiolone per bimbo, menu concordato per compleanno, intolleranza al glutine o lattosio..."
+            class="mt-1.5 block w-full rounded-xl border border-charcoal/20 bg-cream px-4 py-3 text-sm text-charcoal placeholder:text-warmgray/60 focus:border-terracotta focus:outline-none focus:ring-2 focus:ring-terracotta/30"
+          ></textarea>
+        </div>
+
+        <!-- Submit & Direct Phone fallback -->
+        <div class="flex flex-col items-center justify-between gap-4 pt-2 sm:flex-row">
+          <button
+            type="submit"
+            class="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-whatsapp px-7 py-3.5 text-base font-bold text-whatsapp-ink shadow-md transition-all hover:bg-[#1ebe5d] hover:shadow-lg sm:w-auto"
+          >
+            <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.172.109-1.891-.125-.438-.141-.984-.328-1.703-.641-3-1.297-4.953-4.328-5.109-4.531-.141-.203-1.219-1.625-1.219-3.094 0-1.469.766-2.188 1.047-2.484.266-.297.594-.375.797-.375.188 0 .391.016.563.016.188 0 .438-.078.672.5.25.594.844 2.063.922 2.219.078.141.125.313.031.516-.094.203-.141.328-.297.5-.141.172-.313.391-.438.516-.141.141-.297.297-.125.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.469.297.141.469.125.641-.078.172-.203.75-.875.953-1.172.203-.297.406-.25.672-.141.266.094 1.719.813 2.016.953.297.156.5.234.563.359.078.125.078.734-.172 1.438z" />
+            </svg>
+            Invia richiesta su WhatsApp
+          </button>
+
+          <p class="text-center text-xs text-warmgray sm:text-right">
+            Preferisci telefonare direttamente?
+            <a
+              href={`tel:${siteConfig.phoneRaw}`}
+              class="font-semibold text-terracotta underline underline-offset-4 hover:text-terracotta-dark"
+            >
+              {siteConfig.phoneDisplay}
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('whatsapp-booking-form') as HTMLFormElement | null;
+  const nameInput = document.getElementById('booking-name') as HTMLInputElement | null;
+  const guestsSelect = document.getElementById('booking-guests') as HTMLSelectElement | null;
+  const dateInput = document.getElementById('booking-date') as HTMLInputElement | null;
+  const notesInput = document.getElementById('booking-notes') as HTMLTextAreaElement | null;
+  const errorName = document.getElementById('error-name');
+  const errorDate = document.getElementById('error-date');
+  const sundayWarning = document.getElementById('sunday-dinner-warning');
+  const shiftRadios = document.querySelectorAll<HTMLInputElement>('input[name="shift"]');
+
+  function formatItalianDate(isoDate: string): string {
+    const parts = isoDate.split('-');
+    if (parts.length !== 3) return isoDate;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+
+  function getDayOfWeek(isoDate: string): number | null {
+    if (!isoDate) return null;
+    const d = new Date(`${isoDate}T12:00:00`);
+    return Number.isNaN(d.getTime()) ? null : d.getDay();
+  }
+
+  function validateDateAndShift(): boolean {
+    if (!dateInput) return false;
+    const dateVal = dateInput.value.trim();
+    const day = getDayOfWeek(dateVal);
+    const shiftInput = form?.querySelector<HTMLInputElement>('input[name="shift"]:checked');
+    const shiftVal = shiftInput ? shiftInput.value : 'Pranzo';
+
+    // Sunday dinner info
+    if (sundayWarning) {
+      sundayWarning.classList.toggle('hidden', !(day === 0 && shiftVal === 'Cena'));
+    }
+
+    if (!dateVal) {
+      if (errorDate) {
+        errorDate.textContent = 'Seleziona una data per la prenotazione.';
+        errorDate.classList.remove('hidden');
+      }
+      dateInput.setAttribute('aria-invalid', 'true');
+      return false;
+    }
+
+    if (day === 1) {
+      if (errorDate) {
+        errorDate.textContent =
+          'Il lunedì è il nostro giorno di chiusura settimanale. Scegli un altro giorno o chiamaci allo 0523 829409 per eventi di gruppo.';
+        errorDate.classList.remove('hidden');
+      }
+      dateInput.setAttribute('aria-invalid', 'true');
+      return false;
+    }
+
+    errorDate?.classList.add('hidden');
+    dateInput.removeAttribute('aria-invalid');
+    return true;
+  }
+
+  dateInput?.addEventListener('change', validateDateAndShift);
+  shiftRadios.forEach((r) => r.addEventListener('change', validateDateAndShift));
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!nameInput || !guestsSelect || !dateInput) return;
+
+    let isValid = true;
+    const nameVal = nameInput.value.trim();
+    const dateVal = dateInput.value.trim();
+
+    if (nameVal.length < 2) {
+      errorName?.classList.remove('hidden');
+      nameInput.setAttribute('aria-invalid', 'true');
+      isValid = false;
+    } else {
+      errorName?.classList.add('hidden');
+      nameInput.removeAttribute('aria-invalid');
+    }
+
+    const dateValid = validateDateAndShift();
+    if (!dateValid) {
+      isValid = false;
+    }
+
+    if (!isValid) {
+      if (nameVal.length < 2) {
+        nameInput.focus();
+      } else {
+        dateInput.focus();
+      }
+      return;
+    }
+
+    const shiftInput = form.querySelector<HTMLInputElement>('input[name="shift"]:checked');
+    const shiftVal = shiftInput ? shiftInput.value : 'Pranzo';
+    const roomInput = form.querySelector<HTMLInputElement>('input[name="room"]:checked');
+    const roomVal = roomInput ? roomInput.value : 'Indifferente';
+    const guestsVal = guestsSelect.value;
+    const notesVal = notesInput?.value.trim() || '';
+    const waNumber = form.dataset.waNumber || '';
+
+    const lines = [
+      'Ciao Trattoria La Pergola! Vorrei richiedere una prenotazione:',
+      `• Nome: ${nameVal}`,
+      `• Persone: ${guestsVal}`,
+      `• Data: ${formatItalianDate(dateVal)}`,
+      `• Turno: ${shiftVal}`,
+      `• Sala preferita: ${roomVal}`,
+    ];
+
+    if (notesVal) {
+      lines.push(`• Note: ${notesVal}`);
+    }
+
+    const message = lines.join('\n');
+    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+  });
+</script>

@@ -1,0 +1,256 @@
+---
+import { reviews, googleReviewsSummary } from '../data/reviews';
+---
+
+<section
+  id="recensioni"
+  aria-labelledby="recensioni-heading"
+  class="border-t border-charcoal/10 bg-cream py-16 sm:py-24"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Header + Google Rating Badge -->
+    <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+      <div class="max-w-2xl">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+          La Voce dei Nostri Ospiti
+        </p>
+        <h2
+          id="recensioni-heading"
+          class="mt-2 font-serif text-3xl font-bold tracking-tight text-charcoal sm:text-4xl lg:text-5xl"
+        >
+          Cosa dicono di noi su Google
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-warmgray sm:text-lg">
+          Chi si siede ai nostri tavoli racconta il piacere del pesce, i sapori piacentini, la cura del giardino fiorito e l'accoglienza familiare di Lucio e Carmen.
+        </p>
+      </div>
+
+      <!-- Rating Pill + Controls -->
+      <div class="flex flex-wrap items-center gap-4">
+        <a
+          href={googleReviewsSummary.googleReviewsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Valutazione Google ${googleReviewsSummary.rating} su 5 basata su ${googleReviewsSummary.totalReviews} recensioni — Leggi su Google`}
+          class="inline-flex items-center gap-3 rounded-2xl border border-charcoal/15 bg-sand px-4 py-2.5 transition-colors hover:border-terracotta"
+        >
+          <div class="flex items-center gap-1 text-[#E59819]" aria-hidden="true">
+            <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <p class="text-sm font-bold text-charcoal">
+              {googleReviewsSummary.rating} / 5 su Google
+            </p>
+            <p class="text-xs text-warmgray">
+              Oltre {googleReviewsSummary.totalReviews} recensioni
+            </p>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-2" aria-label="Controlli carosello recensioni">
+          <button
+            type="button"
+            id="reviews-prev"
+            aria-label="Recensione precedente"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/20 bg-sand text-charcoal transition-colors hover:border-terracotta hover:bg-terracotta hover:text-white"
+          >
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            id="reviews-next"
+            aria-label="Recensione successiva"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/20 bg-sand text-charcoal transition-colors hover:border-terracotta hover:bg-terracotta hover:text-white"
+          >
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crossfade Stage (1 card on mobile, 2 cards on md+) -->
+    <div
+      id="reviews-stage"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Recensioni verificate con cambio automatico a dissolvenza"
+      aria-live="polite"
+      class="relative mt-10 grid grid-cols-1 gap-6 transition-opacity duration-500 ease-in-out md:grid-cols-2"
+    >
+      {
+        reviews.map((rev, idx) => (
+          <article
+            data-review-index={idx}
+            class:list={[
+              'review-fade-card flex min-h-[250px] flex-col justify-between rounded-3xl border border-charcoal/10 bg-sand/85 p-6 shadow-sm transition-all duration-500 sm:p-8',
+              idx === 0 ? 'flex opacity-100' : idx === 1 ? 'hidden opacity-100 md:flex' : 'hidden opacity-0',
+            ]}
+          >
+            <div>
+              <!-- Stars & Badge -->
+              <div class="flex items-center justify-between gap-2">
+                <div
+                  class="flex items-center gap-0.5 text-[#E59819]"
+                  aria-label={`Valutazione: ${rev.rating} stelle su 5`}
+                >
+                  {Array.from({ length: rev.rating }).map(() => (
+                    <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <span class="rounded-full bg-cream px-3 py-0.5 text-[11px] font-semibold text-warmgray">
+                  {rev.badge || 'Google'}
+                </span>
+              </div>
+
+              {rev.highlight && (
+                <h3 class="mt-3.5 font-serif text-2xl font-bold text-charcoal">
+                  “{rev.highlight}”
+                </h3>
+              )}
+
+              <blockquote class="mt-3 text-sm leading-relaxed text-warmgray sm:text-base">
+                «{rev.text}»
+              </blockquote>
+            </div>
+
+            <footer class="mt-6 flex items-center justify-between border-t border-charcoal/10 pt-4 text-xs sm:text-sm">
+              <span class="font-bold text-charcoal">{rev.author}</span>
+              <span class="text-warmgray">{rev.dateLabel}</span>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Dots Indicator -->
+    <div
+      class="mt-7 flex items-center justify-center gap-2"
+      role="tablist"
+      aria-label="Seleziona recensione"
+    >
+      {
+        reviews.map((rev, idx) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={idx === 0 ? 'true' : 'false'}
+            aria-label={`Mostra recensione di ${rev.author}`}
+            data-review-dot={idx}
+            class:list={[
+              'review-dot h-2.5 rounded-full transition-all duration-300',
+              idx === 0 ? 'w-8 bg-terracotta' : 'w-2.5 bg-charcoal/20 hover:bg-charcoal/40',
+            ]}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const stage = document.getElementById('reviews-stage');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.review-fade-card'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.review-dot'));
+  const prevBtn = document.getElementById('reviews-prev');
+  const nextBtn = document.getElementById('reviews-next');
+
+  const total = cards.length;
+  let currentIndex = 0;
+  let intervalId: number | undefined;
+  let isTransitioning = false;
+
+  function updateDots(activeIdx: number) {
+    dots.forEach((dot, i) => {
+      const active = i === activeIdx;
+      dot.setAttribute('aria-selected', String(active));
+      if (active) {
+        dot.classList.remove('w-2.5', 'bg-charcoal/20');
+        dot.classList.add('w-8', 'bg-terracotta');
+      } else {
+        dot.classList.remove('w-8', 'bg-terracotta');
+        dot.classList.add('w-2.5', 'bg-charcoal/20');
+      }
+    });
+  }
+
+  function showPair(nextIdx: number) {
+    if (!stage || total === 0 || isTransitioning) return;
+    isTransitioning = true;
+    currentIndex = (nextIdx + total) % total;
+    const secondIndex = (currentIndex + 1) % total;
+
+    // Fade out stage softly
+    stage.classList.add('opacity-0');
+
+    window.setTimeout(() => {
+      cards.forEach((card, i) => {
+        card.classList.remove('flex', 'hidden', 'md:flex', 'opacity-100', 'opacity-0');
+        if (i === currentIndex) {
+          card.classList.add('flex', 'opacity-100');
+        } else if (i === secondIndex) {
+          card.classList.add('hidden', 'md:flex', 'opacity-100');
+        } else {
+          card.classList.add('hidden', 'opacity-0');
+        }
+      });
+
+      updateDots(currentIndex);
+
+      // Fade back in
+      stage.classList.remove('opacity-0');
+      window.setTimeout(() => {
+        isTransitioning = false;
+      }, 500);
+    }, 320);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    intervalId = window.setInterval(() => {
+      showPair(currentIndex + 1);
+    }, 5000);
+  }
+
+  function stopAutoplay() {
+    if (intervalId !== undefined) {
+      window.clearInterval(intervalId);
+      intervalId = undefined;
+    }
+  }
+
+  prevBtn?.addEventListener('click', () => {
+    showPair(currentIndex - 1);
+    startAutoplay();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    showPair(currentIndex + 1);
+    startAutoplay();
+  });
+
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      if (idx === currentIndex) return;
+      showPair(idx);
+      startAutoplay();
+    });
+  });
+
+  stage?.addEventListener('mouseenter', stopAutoplay);
+  stage?.addEventListener('mouseleave', startAutoplay);
+  stage?.addEventListener('touchstart', stopAutoplay, { passive: true });
+  stage?.addEventListener('touchend', startAutoplay, { passive: true });
+
+  // Respect prefers-reduced-motion
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    startAutoplay();
+  }
+</script>

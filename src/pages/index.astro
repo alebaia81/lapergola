@@ -1,0 +1,400 @@
+---
+import { Image } from 'astro:assets';
+import MainLayout from '../layouts/MainLayout.astro';
+import ReviewsCarousel from '../components/ReviewsCarousel.astro';
+import MenuSection from '../components/MenuSection.astro';
+import WhatsAppBookingForm from '../components/WhatsAppBookingForm.astro';
+import { siteConfig } from '../data/siteConfig';
+
+import verandaImg from '../assets/images/veranda-principale.jpg';
+import giardinoVerandaImg from '../assets/images/giardino-veranda.jpg';
+import giardinoPergolaImg from '../assets/images/giardino-pergola.jpg';
+import salaMattoniImg from '../assets/images/sala-mattoni-stufa.jpg';
+import salumiImg from '../assets/images/piatti/salumi-gnocco.jpg';
+import pisareiImg from '../assets/images/piatti/pisarei-faso.jpg';
+import taglioliniNeriImg from '../assets/images/piatti/tagliolini-neri.jpg';
+
+const waHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.defaultWhatsAppMessage)}`;
+
+const pillars = [
+  {
+    title: 'La Veranda Aperta sul Giardino',
+    description:
+      'Grandi vetrate in legno che nella bella stagione si aprono sul prato curato e sulle aiuole fiorite, per pranzare e cenare respirando il verde.',
+    image: giardinoVerandaImg,
+    alt: 'Il giardino fiorito e il prato verde visti dalla veranda apribile di Trattoria La Pergola',
+  },
+  {
+    title: 'La Sala in Mattoni e Stufa in Maiolica',
+    description:
+      'Travi in legno, mattoni pieni a vista e il calore della stufa in maiolica: la sala storica dove ritrovare il piacere delle lunghe tavolate.',
+    image: salaMattoniImg,
+    alt: 'La sala interna in mattoni antichi a vista con la stufa in maiolica e i tavoli in legno',
+  },
+  {
+    title: 'Tradizione Piacentina & Cucina di Mare',
+    description:
+      'Salumi piacentini, pisarei e culatello accanto a tagliolini neri ai gamberi, spaghetti allo scoglio, fritto misto dorato e dolci fatti in casa.',
+    image: taglioliniNeriImg,
+    alt: 'Tagliolini al nero di seppia con gamberi, pomodorini e basilico fresco',
+  },
+];
+---
+
+<MainLayout>
+  <!-- 1. Hero Section -->
+  <section class="relative flex min-h-[78vh] items-center overflow-hidden bg-charcoal sm:min-h-[85vh]">
+    <Image
+      src={verandaImg}
+      alt="Veranda luminosa di Trattoria La Pergola a Olza affacciata sul verde del giardino"
+      widths={[640, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/55 to-charcoal/35"
+    ></div>
+
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <p class="inline-flex items-center gap-2 rounded-full border border-cream/30 bg-charcoal/50 px-3.5 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-sand backdrop-blur-sm">
+          {siteConfig.locality} • Dal {siteConfig.foundedYear}
+        </p>
+        <h1 class="mt-5 font-serif text-4xl font-bold leading-[1.1] tracking-tight text-cream sm:text-5xl md:text-6xl">
+          Terra piacentina e profumo di mare, sotto la nostra pergola.
+        </h1>
+        <p class="mt-5 max-w-2xl text-base leading-relaxed text-sand/95 sm:text-xl">
+          Dai salumi tipici e i pisarei fatti a mano fino alle specialità di pesce, da gustare tra la sala storica in mattoni e la veranda che d'estate si apre sul giardino.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2.5 rounded-full bg-whatsapp px-6 py-3.5 text-base font-bold text-whatsapp-ink shadow-lg transition-all hover:bg-[#1ebe5d] hover:shadow-xl"
+          >
+            <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.172.109-1.891-.125-.438-.141-.984-.328-1.703-.641-3-1.297-4.953-4.328-5.109-4.531-.141-.203-1.219-1.625-1.219-3.094 0-1.469.766-2.188 1.047-2.484.266-.297.594-.375.797-.375.188 0 .391.016.563.016.188 0 .438-.078.672.5.25.594.844 2.063.922 2.219.078.141.125.313.031.516-.094.203-.141.328-.297.5-.141.172-.313.391-.438.516-.141.141-.297.297-.125.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.469.297.141.469.125.641-.078.172-.203.75-.875.953-1.172.203-.297.406-.25.672-.141.266.094 1.719.813 2.016.953.297.156.5.234.563.359.078.125.078.734-.172 1.438z" />
+            </svg>
+            Prenota il tuo tavolo su WhatsApp
+          </a>
+          <a
+            href="#menu"
+            class="inline-flex items-center justify-center rounded-full border-2 border-cream/80 bg-charcoal/40 px-6 py-3.5 text-base font-semibold text-cream backdrop-blur-sm transition-colors hover:bg-cream hover:text-charcoal"
+          >
+            Consulta il Menu e i Prezzi
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Anteprima "La Nostra Atmosfera" (3 Pilastri) -->
+  <section aria-labelledby="atmosfera-heading" class="bg-sand py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sage">
+          Gli Spazi e la Tavola
+        </p>
+        <h2 id="atmosfera-heading" class="mt-2 font-serif text-3xl font-bold tracking-tight text-charcoal sm:text-4xl lg:text-5xl">
+          Perché venire alla Pergola
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-warmgray sm:text-lg">
+          Un luogo pensato per stare bene a tavola: d'estate con le vetrate aperte sul verde, d'inverno nel calore dei mattoni antichi, sempre con una cucina generosa e onesta.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3 lg:gap-8">
+        {
+          pillars.map((pillar) => (
+            <article class="group overflow-hidden rounded-2xl border border-charcoal/10 bg-cream shadow-sm transition-shadow hover:shadow-md">
+              <div class="aspect-[4/3] overflow-hidden">
+                <Image
+                  src={pillar.image}
+                  alt={pillar.alt}
+                  widths={[400, 700]}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="font-serif text-2xl font-bold text-charcoal">{pillar.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-warmgray sm:text-base">
+                  {pillar.description}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/chi-siamo"
+          class="inline-flex items-center gap-2 rounded-full border border-terracotta px-6 py-3 text-sm font-semibold text-terracotta transition-colors hover:bg-terracotta hover:text-white"
+        >
+          Scopri la nostra storia dal {siteConfig.foundedYear}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2b. Carosello Recensioni Google -->
+  <ReviewsCarousel />
+
+  <!-- 3. Il Menu in Prima Pagina -->
+  <MenuSection />
+
+  <!-- 4. Mini-Gallery Bento Grid -->
+  <section aria-labelledby="mini-gallery-heading" class="border-t border-charcoal/10 bg-cream py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+            Scorci e Piatti Reali
+          </p>
+          <h2 id="mini-gallery-heading" class="mt-2 font-serif text-3xl font-bold tracking-tight text-charcoal sm:text-4xl lg:text-5xl">
+            Dalla Veranda alla Tavola
+          </h2>
+        </div>
+        <a
+          href="/gallery"
+          class="inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-terracotta-dark"
+        >
+          Guarda tutte le 15 foto
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <!-- Bento Grid -->
+      <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+        <div class="overflow-hidden rounded-2xl border border-charcoal/10 sm:col-span-2 lg:row-span-2">
+          <Image
+            src={verandaImg}
+            alt="La veranda luminosa immersa nel verde di Trattoria La Pergola"
+            widths={[500, 900]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            class="h-full min-h-[260px] w-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-charcoal/10">
+          <Image
+            src={salumiImg}
+            alt="Tagliere di Salumi Piacentini tradizionali"
+            widths={[400, 600]}
+            sizes="(max-width: 640px) 100vw, 25vw"
+            class="h-60 w-full object-cover transition-transform duration-500 hover:scale-105 lg:h-full"
+          />
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-charcoal/10">
+          <Image
+            src={pisareiImg}
+            alt="Piatto fumante di Pisarei e fasoi tradizionali piacentini"
+            widths={[400, 600]}
+            sizes="(max-width: 640px) 100vw, 25vw"
+            class="h-60 w-full object-cover transition-transform duration-500 hover:scale-105 lg:h-full"
+          />
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-charcoal/10">
+          <Image
+            src={giardinoVerandaImg}
+            alt="Il giardino curato con aiuole fiorite e veranda aperta per l'estate"
+            widths={[400, 600]}
+            sizes="(max-width: 640px) 100vw, 25vw"
+            class="h-60 w-full object-cover transition-transform duration-500 hover:scale-105 lg:h-full"
+          />
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-charcoal/10">
+          <Image
+            src={giardinoPergolaImg}
+            alt="La pergola in legno illuminata di sera vista dal giardino"
+            widths={[400, 600]}
+            sizes="(max-width: 640px) 100vw, 25vw"
+            class="h-60 w-full object-cover transition-transform duration-500 hover:scale-105 lg:h-full"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4b. Sezione Eventi, Cerimonie & Tavolate -->
+  <section aria-labelledby="eventi-heading" class="border-t border-charcoal/10 bg-charcoal py-16 text-cream sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+            Tavolate, Ricorrenze &amp; Gruppi
+          </p>
+          <h2 id="eventi-heading" class="mt-2 font-serif text-3xl font-bold tracking-tight text-cream sm:text-4xl lg:text-5xl">
+            Spazio e accoglienza per le tue occasioni speciali
+          </h2>
+          <p class="mt-4 text-base leading-relaxed text-sand/90 sm:text-lg">
+            Che si tratti di un compleanno in famiglia, una comunione, un pranzo domenicale numeroso o una cena aziendale, componiamo insieme a te menu personalizzati di <strong class="font-semibold text-cream">Tradizione Piacentina</strong>, di <strong class="font-semibold text-cream">Mare</strong> o misti a prezzo concordato.
+          </p>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl border border-cream/15 bg-cream/5 p-4">
+              <p class="font-serif text-xl font-bold text-cream">Menu Concordati</p>
+              <p class="mt-1 text-xs leading-relaxed text-sand/80">
+                Proposte su misura di terra o di pesce, dall'antipasto al dolce della casa, senza sorprese sul conto.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-cream/15 bg-cream/5 p-4">
+              <p class="font-serif text-xl font-bold text-cream">Veranda &amp; Giardino</p>
+              <p class="mt-1 text-xs leading-relaxed text-sand/80">
+                Grandi tavolate luminose con vista sul prato recintato, perfetto e sicuro anche per i bambini.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-cream/15 bg-cream/5 p-4">
+              <p class="font-serif text-xl font-bold text-cream">Parcheggio Comodo</p>
+              <p class="mt-1 text-xs leading-relaxed text-sand/80">
+                Ampio piazzale gratuito davanti all'ingresso, a soli 5 minuti dal casello A21 di Castelvetro / Cremona.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="rounded-3xl border border-cream/15 bg-cream/10 p-6 backdrop-blur-sm sm:p-8">
+            <h3 class="font-serif text-2xl font-bold text-cream">
+              Organizzi una tavolata da 8 o più persone?
+            </h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-sand/90">
+              Scrivici o chiamaci direttamente per riservare la tua sala preferita e concordare con Lucio e Carmen i piatti del tuo evento.
+            </p>
+            <div class="mt-6 flex flex-col gap-3">
+              <a
+                href="#prenota"
+                id="cta-prenota-gruppo"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-terracotta px-6 py-3.5 text-sm font-bold text-white shadow-md transition-colors hover:bg-terracotta-dark"
+              >
+                Richiedi disponibilità per un gruppo
+                <span aria-hidden="true">↓</span>
+              </a>
+              <a
+                href={`tel:${siteConfig.phoneRaw}`}
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-cream/30 bg-charcoal/50 px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-charcoal"
+              >
+                Chiama lo {siteConfig.phoneDisplay}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Prenotazione Rapida WhatsApp -->
+  <WhatsAppBookingForm />
+
+  <script>
+    const groupCta = document.getElementById('cta-prenota-gruppo');
+    groupCta?.addEventListener('click', () => {
+      const guestsSelect = document.getElementById('booking-guests') as HTMLSelectElement | null;
+      const notesInput = document.getElementById('booking-notes') as HTMLTextAreaElement | null;
+      if (guestsSelect) {
+        guestsSelect.value = '8+';
+      }
+      if (notesInput && !notesInput.value.trim()) {
+        notesInput.value = 'Vorrei informazioni per una tavolata / menu concordato per gruppo.';
+      }
+    });
+  </script>
+
+  <!-- 6. Dove Siamo & Orari -->
+  <section id="contatti" aria-labelledby="contatti-heading" class="scroll-mt-20 bg-cream py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <!-- Info Column -->
+        <div class="space-y-6 lg:col-span-5">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta">
+              Indicazioni e Orari
+            </p>
+            <h2 id="contatti-heading" class="mt-2 font-serif text-3xl font-bold tracking-tight text-charcoal sm:text-4xl lg:text-5xl">
+              Dove Siamo &amp; Orari
+            </h2>
+          </div>
+
+          <div class="space-y-4 rounded-2xl border border-charcoal/10 bg-sand p-6">
+            <div>
+              <h3 class="font-serif text-xl font-bold text-charcoal">Indirizzo</h3>
+              <p class="mt-1 text-sm text-warmgray sm:text-base">{siteConfig.address}</p>
+              <p class="mt-2 text-xs leading-relaxed text-warmgray sm:text-sm">
+                {siteConfig.directionsNote}
+              </p>
+            </div>
+
+            <div class="border-t border-charcoal/10 pt-4">
+              <h3 class="font-serif text-xl font-bold text-charcoal">Orari di Apertura</h3>
+              <dl class="mt-2 space-y-1.5 text-sm">
+                {
+                  siteConfig.openingHours.map((slot) => (
+                    <div class="flex justify-between gap-4">
+                      <dt class="font-semibold text-charcoal">{slot.days}</dt>
+                      <dd class={slot.hours === 'Chiuso' ? 'font-semibold text-terracotta' : 'text-warmgray'}>
+                        {slot.hours}
+                      </dd>
+                    </div>
+                  ))
+                }
+              </dl>
+            </div>
+
+            <div class="border-t border-charcoal/10 pt-4">
+              <h3 class="font-serif text-xl font-bold text-charcoal">Chiamata Diretta</h3>
+              <p class="mt-1">
+                <a
+                  href={`tel:${siteConfig.phoneRaw}`}
+                  class="text-lg font-bold text-terracotta underline decoration-terracotta/40 underline-offset-4 hover:text-terracotta-dark"
+                >
+                  {siteConfig.phoneDisplay}
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <a
+              href={siteConfig.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-sage px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sage-dark"
+            >
+              Apri su Google Maps
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href="#prenota"
+              class="inline-flex items-center gap-2 rounded-full border border-charcoal/20 bg-sand px-6 py-3 text-sm font-semibold text-charcoal transition-colors hover:border-terracotta hover:text-terracotta"
+            >
+              Prenota il Tavolo
+            </a>
+          </div>
+        </div>
+
+        <!-- Map Column -->
+        <div class="lg:col-span-7">
+          <div class="overflow-hidden rounded-3xl border border-charcoal/15 bg-sand shadow-sm">
+            <iframe
+              title="Mappa interattiva per raggiungere Trattoria La Pergola a Olza"
+              src={siteConfig.googleMapsEmbedUrl}
+              width="100%"
+              height="440"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="h-[340px] w-full sm:h-[440px]"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
